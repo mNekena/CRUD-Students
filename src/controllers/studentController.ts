@@ -1,5 +1,7 @@
-import { Request, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import * as studentService from '../services/studentService';
+
+const router = Router();
 
 export const getAll = async (req: Request, res: Response) => {
   const students = await studentService.getAllStudents();
@@ -28,3 +30,11 @@ export const remove = async (req: Request, res: Response) => {
   if (!success) return res.status(404).json({ message: 'Student not found' });
   res.status(204).send();
 };
+
+router.get('/students', getAll);
+router.get('/students/:id', getOne);
+router.post('/students', create);
+router.put('/students/:id', update);
+router.delete('/students/:id', remove);
+
+export default router;
