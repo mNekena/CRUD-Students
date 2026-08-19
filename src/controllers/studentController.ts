@@ -1,7 +1,9 @@
 import { Router, Request, Response } from 'express';
 import * as studentService from '../services/studentService';
+import { authMiddleware } from "../middlewares/authMiddleware";
 
 const router = Router();
+router.use(authMiddleware);
 
 export const getAll = async (req: Request, res: Response) => {
   const students = await studentService.getAllStudents();
@@ -31,10 +33,10 @@ export const remove = async (req: Request, res: Response) => {
   res.status(204).send();
 };
 
-router.get('/students', getAll);
-router.get('/students/:id', getOne);
-router.post('/students', create);
-router.put('/students/:id', update);
-router.delete('/students/:id', remove);
+router.get('/', getAll);
+router.get('/:id', getOne);
+router.post('/', create);
+router.put('/:id', update);
+router.delete('/:id', remove);
 
 export default router;

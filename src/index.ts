@@ -1,12 +1,14 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import studentRoutes from './controllers/studentController';
+import authRoutes from './controllers/authController';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(studentRoutes);
+app.use('/auth', authRoutes);
+app.use('/students', studentRoutes);
 
 const PORT = process.env.PORT || 3000;
 
