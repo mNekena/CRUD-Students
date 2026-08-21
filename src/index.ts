@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import studentRoutes from './controllers/studentController';
 import authRoutes from './controllers/authController';
+import { errorHandler } from './security/errorHandler';
 
 dotenv.config();
 
@@ -15,6 +16,8 @@ const PORT = process.env.PORT || 3000;
 app.get('/', (req: Request, res: Response) => {
   res.send('CRUD Students');
 });
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server started on http://localhost:${PORT}`);

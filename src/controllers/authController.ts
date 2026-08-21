@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import * as userRepository from '../repository/userRepository';
-import { generateToken } from '../utils/jwt';
+import { generateToken } from '../security/jwt';
 
 const router = Router();
 
