@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import * as studentService from '../services/studentService';
 import { authMiddleware } from "../middlewares/authMiddleware";
+import { HttpError } from '../security/httpError';
 
 const router = Router();
 router.use(authMiddleware);
@@ -38,5 +39,7 @@ router.get('/:id', getOne);
 router.post('/', create);
 router.put('/:id', update);
 router.delete('/:id', remove);
+
+app
 
 export default router;
