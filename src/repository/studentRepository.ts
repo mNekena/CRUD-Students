@@ -31,3 +31,8 @@ export const remove = async (id: number): Promise<boolean> => {
   const result = await pool.query('DELETE FROM students WHERE id = $1', [id]);
   return (result.rowCount ?? 0) > 0;
 };
+
+export const findByEmail = async (email: string): Promise<Student | null> => {
+  const result = await pool.query('SELECT * FROM students WHERE email = $1', [email]);
+  return result.rows[0] || null;
+};

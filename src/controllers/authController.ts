@@ -1,37 +1,25 @@
 import { Router, Request, Response } from 'express';
-import bcrypt from 'bcrypt';
-import * as userRepository from '../repository/userRepository';
-import { generateToken } from '../security/jwt';
+import * as authService from '../services/authService';
+import { validate } from '../middlewares/validate';
+import { validateAuth } from '../validators/authValidator';
 
 const router = Router();
 
 const register = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-
-  const existingUser = await userRepository.findUserByEmail(email);
-  if (existingUser)
-    return res.status(409).json({ message: 'User already exists' });
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await userRepository.createUser(email, hashedPassword);
-
-    res.status(201).json(newUser);
-  };
+  const user = await authService.registerUser(email, password);
+  res.status(201).json(user);
+};
 
 const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  const token = await authService.loginUser(email, password);
+  res.status(200).json({ token });
+};
 
-    const user = await userRepository.findUserByEmail(email);
-    if (!user) return res.status(401).json({ message: 'Invalid email or password' });
+router.post('/register', register);
+router.post('/login', login);
+router.post('/register', validate(validateAuth), register);
+router.post('/login', validate(validateAuth), login);
 
-    const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) return res.status(401).json({ message: 'Invalid email or password' });
-
-    const token = generateToken({ id: user.id, email: user.email });
-    res.status(200).json({ token });
-  }
-
-  router.post('/register', register);
-  router.post('/login', login);
-
-  export default router;
+export default router;
